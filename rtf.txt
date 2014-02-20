@@ -1,0 +1,61 @@
+        private void writeToFile(string path)
+        {
+            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+            RtfWriter2 writer = RtfWriter2.GetInstance(document, new FileStream(path, FileMode.Create));
+            //writer.SetDataCacheStyle(iTextSharp.text.rtf.document.output.RtfDataCache.CACHE_DISK);
+            FontFactory.Register("c:\\windows\\fonts\\mingliu.ttc,1", "mingliu1");
+
+            Table headerTable = new Table(2, 1);
+            headerTable.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            headerTable.Cellpadding = 2;
+            headerTable.Cellspacing = 0;
+            int[] columnWidths = { 70, 30};
+            headerTable.SetWidths(columnWidths);
+            //headerTable.WidthPercentage = 100;
+
+            Cell titleCell = new Cell(new Phrase("**傢俱股份有限公司", FontFactory.GetFont("mingliu1", 12, iTextSharp.text.Font.UNDERLINE, Color.YELLOW)));
+            //titleCell.Colspan = 6;
+            titleCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            titleCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerTable.AddCell(titleCell);
+
+            Cell titleCell1 = new Cell(new Phrase("报价单", FontFactory.GetFont("mingliu1", 12, iTextSharp.text.Font.BOLD)));
+            //titleCell1.Colspan = 6;
+            titleCell1.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            titleCell1.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerTable.AddCell(titleCell1);
+            Cell blankCell = new Cell(new Phrase("", FontFactory.GetFont("mingliu1", 12, iTextSharp.text.Font.BOLD)));
+            //blankCell.Colspan = 6;
+            blankCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            headerTable.AddCell(blankCell);
+
+            RtfHeaderFooterGroup header = new RtfHeaderFooterGroup();
+            header.SetHeaderFooter(
+                                new iTextSharp.text.rtf.headerfooter.RtfHeaderFooter(headerTable),
+                                iTextSharp.text.rtf.headerfooter.RtfHeaderFooter.DISPLAY_ALL_PAGES);
+            document.Header = header;
+
+            //打开文档
+
+            document.Open();
+
+            //正文的编辑
+
+            iTextSharp.text.Table dataTable = new iTextSharp.text.Table(9);
+            dataTable.DefaultCellBorder = Rectangle.NO_BORDER;
+
+            dataTable.Cellspacing = 0;
+            dataTable.Cellpadding = 2;
+            dataTable.DefaultHorizontalAlignment = Element.ALIGN_CENTER;
+            int[] columnWidths3 = { 6, 15, 20, 10, 10, 8, 10, 11, 20 }; // percentage
+            dataTable.SetWidths(columnWidths3);
+            //dataTable.WidthPercentage = 100; // percentage
+
+            //正文也是一个table，数据自己定义加入，略去
+
+            //正文定义的table加入Document
+            document.Add(dataTable);
+            //关闭文档
+
+            document.Close();  
+        }
